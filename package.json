@@ -21,7 +21,7 @@
     "express": "^5.2.1",
     "firebase": "^12.15.0",
     "firebase-admin": "^14.5.0",
-    "framer-motion": "^12.40.0",
+    "framer-motion": "^13.4.4",
     "glob": "^13.0.6",
     "groq-sdk": "^1.6.0",
     "localforage": "^1.10.0",
