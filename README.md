@@ -1,13 +1,22 @@
----
-title: ChatLiz
-emoji: 💬
-colorFrom: purple
-colorTo: pink
-sdk: docker
-app_port: 7860
-pinned: false
----
+graph TD
+    subgraph Frontend [Frontend - React + Vite]
+        UI[UI Glassmorphism] -->|Sockets| SocketClient[Socket.io Client]
+        UI -->|HTTP| RESTClient[Axios/Fetch]
+    end
 
-# ChatLiz
+    subgraph Backend [Backend - Express + TS]
+        SocketServer[Socket.io Server] --> Router{Router / Event Loop}
+        RESTClient --> Router
+        Router -->|Moderación| Mod[Motor de Moderación]
+        Router -->|Peticiones IA| AIService[Servicio de IA Resiliente]
+    end
 
-Bienvenido a ChatLiz, una aplicación full-stack. Este repositorio está configurado para ejecutarse en Hugging Face Spaces mediante Docker.
+    subgraph Data & AI [Capa de Datos e IA]
+        Router --> Firebase[(Firebase Realtime DB)]
+        Router -.Fallback.-> JSON[(Local db.json)]
+        
+        AIService -->|Intento 1| Gemini[Google Gemini API]
+        Gemini -->|Si falla/Timeout| Groq[Groq Llama 3 API]
+    end
+
+    SocketClient -.Comunicación Bidireccional.-> SocketServer
