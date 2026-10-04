@@ -1,0 +1,27 @@
+name: Auto Commit and Push UI Changes
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Permite ejecutarlo manualmente desde la pestaña "Actions" en GitHub
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and Push if there are changes
+        run: |
+          git add .
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: auto-sync de cambios de UI y configuración" && git push)
